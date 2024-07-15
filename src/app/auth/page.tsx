@@ -38,7 +38,7 @@ export default function page() {
           <AuthButtons />
         </div>
       </div>
-      <div className="flex-1 relative overflow-hidden justify-center items-center hidden md:flex">
+      <div className="flex-1 relative overflow-hidden justify-center items-center hidden md:flex bg-noise">
         <Image
           src={"/hero-right.png"}
           alt="Hero Image"
