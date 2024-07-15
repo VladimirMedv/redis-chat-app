@@ -8,6 +8,7 @@ import {
 } from "../ui/resizable";
 import { cn } from "@/lib/utils";
 import Sidebar from "../Sidebar";
+import MessageContainer from "./MessageContainer";
 
 interface ChatLayoutProps {
   defaultLayout: number[] | undefined;
@@ -66,7 +67,7 @@ export default function ChatLayout({
       <ResizableHandle withHandle />
 
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <div className="flex justify-center items-center h-full w-full px-10">
+        {/* <div className="flex justify-center items-center h-full w-full px-10">
           <div className="flex justify-center items-center flex-col gap-4">
             <img
               src="/logo.png"
@@ -77,7 +78,8 @@ export default function ChatLayout({
               Click on a chat to view the messages
             </p>
           </div>
-        </div>
+        </div> */}
+        <MessageContainer />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
