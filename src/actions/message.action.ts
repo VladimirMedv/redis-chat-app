@@ -1,11 +1,11 @@
 "use server";
 
 import { Message } from "@/db/dummy";
-
 import { redis } from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { pusherServer } from "@/lib/pusher";
 
-type sendMessageActionArgs = {
+type SendMessageActionArgs = {
   content: string;
   receiverId: string;
   messageType: "text" | "image";
@@ -14,7 +14,7 @@ export async function sendMessageAction({
   content,
   messageType,
   receiverId,
-}: sendMessageActionArgs) {
+}: SendMessageActionArgs) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -33,10 +33,11 @@ export async function sendMessageAction({
       participant1: senderId,
       participant2: receiverId,
     });
-  }
 
-  await redis.sadd(`user:${senderId}:conversations`, conversationId);
-  await redis.sadd(`user:${receiverId}:conversations`, conversationId);
+    // Add the sender and receiver to the conversation
+    await redis.sadd(`user:${senderId}:conversations`, conversationId);
+    await redis.sadd(`user:${receiverId}:conversations`, conversationId);
+  }
 
   // Generate a unique message ID
   const messageId = `message:${Date.now()}:${Math.random()
@@ -58,14 +59,23 @@ export async function sendMessageAction({
     member: JSON.stringify(messageId),
   });
 
+  const channelName = `${senderId}__${receiverId}`
+    .split("__")
+    .sort()
+    .join("__");
+
+  await pusherServer?.trigger(channelName, "newMessage", {
+    message: { senderId, content, timestamp, messageType },
+  });
+
   return { success: true, conversationId, messageId };
 }
 
 export async function getMessages(
-  useSelectedUser: string,
-  currentUser: string
+  selectedUserId: string,
+  currentUserId: string
 ) {
-  const conversationId = `conversation:${[useSelectedUser, currentUser]
+  const conversationId = `conversation:${[selectedUserId, currentUserId]
     .sort()
     .join(":")}`;
 
