@@ -6,7 +6,7 @@ type SelectedUserState = {
   setSelectedUser: (user: User | null) => void;
 };
 
-export const useSelectedUser = create<setSelectedUser>((set) => ({
+export const useSelectedUser = create<SelectedUserState>((set) => ({
   selectedUser: null,
   setSelectedUser: (user: User | null) => set({ selectedUser: user }),
 }));

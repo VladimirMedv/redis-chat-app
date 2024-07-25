@@ -14,7 +14,7 @@ import { usePreferences } from "@/store/usePreferences";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendMessageAction } from "@/actions/message.action";
 import { useSelectedUser } from "@/store/useSelectedUser";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldUploadWidget, CloudinaryUploadWidgetInfo } from "next-cloudinary";
 import {
   Dialog,
   DialogContent,
