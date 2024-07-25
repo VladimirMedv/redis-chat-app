@@ -5,7 +5,7 @@ type Preferences = {
   setSoundEnabled: (enabled: boolean) => void;
 };
 
-export const usePreferences = create((set) => ({
+export const usePreferences = create<Preferences>((set) => ({
   soundEnabled: true,
   setSoundEnabled: (enabled: boolean) => set({ soundEnabled: enabled }),
 }));
